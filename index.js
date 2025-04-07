@@ -8,21 +8,22 @@ const genAI = new GoogleGenerativeAI(process.env.API_KEY);
 async function run() {
   const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
 
+  const categorias = await fazerPergunta(
+    "Me fale as categorias que você deseja visualizar sobre o determinado destino: "
+  );
   const prompt = await fazerPergunta(
     "Me fale sobre o destino que deseja conhecer: "
   );
 
   const parts = [
     {
-      text: "Você é um chatbot de um site que vende pacotes de viagens. Ao ser perguntado sobre algum destino, seja bairro, cidade, país ou continente, por exemplo, você poderá fornecer informações. Caso seja perguntado sobre algo que não corresponda a viagens, informe que não pode responder a respeito",
+      text: "Você é o chatbot de um site que vende pacotes de viagem. Ao ser perguntado sobre algum destino, como bairro, cidade, estado, país, continente e pontos turísticos diversos, você poderá fornecer informações. Caso seja perguntado sobre algo que não ter relação com viagem e turismo, informe que não poder responder a essa dúvida.\n\nPara formular a resposta, quero que os tópicos apareçam como lista com marcadores e sempre deve conter apenas  as categorias que forem solicitadas no momento da pergunta.\n\nAlguns exemplos de categorias: características, localização, cultura, pontos turísticos,  culinária, clima, dicas, como chegar, curiosidades.",
     },
+    { text: "input: me fale sobre o bairro do flamengo, no Rio de Janeiro" },
     {
-      text: "input: me fale sobre o flamengo, bairro tradicional do Rio de Janeiro",
+      text: "output: *Bairro do Flamengo, Rio de Janeiro\n\n *Características:\n    * Bairro nobre e residencial\n    * Conhecido por sua orla e parques\n    * Coração financeiro da cidade\n *Localização:\n    * Zona Sul do Rio de Janeiro\n    * Limita-se com as praias de Copacabana, Botafogo e Glória\n *Cultura:\n    * Sede do Museu de Arte Moderna (MAM) e da Marina da Glória\n    * Abriga o Parque do Flamengo, um dos maiores parques urbanos do país\n *Pontos Turísticos:\n    * Orla do Flamengo (anel viário com ciclovia e vista panorâmica)\n    * Museu de Arte Moderna (MAM)\n    * Marina da Glória (e palco do Reveillon)\n    * Parque do Flamengo\n    * Morro da Viúva (com vista para o Pão de Açúcar)\n *Culinária:*\n    * Diversos restaurantes e bares na orla e no Parque do Flamengo\n    * Opções gastronômicas variadas, de frutos do mar a comida internacional",
     },
-    {
-      text: "output: O Flamengo é um bairro charmoso e tradicional da Zona Sul do Rio de Janeiro, oferecendo uma mistura interessante de história, beleza natural e vida urbana. Localizado entre o centro da cidade e as famosas praias de Copacabana e Ipanema, o bairro tem muito a oferecer aos visitantes. Pontos Turísticos e Atrações: Parque do Flamengo (Aterro do Flamengo): Um extenso parque à beira-mar com jardins, áreas de lazer, museus e vistas deslumbrantes para a Baía de Guanabara e o Pão de Açúcar. Perfeito para caminhadas, ciclismo, piqueniques e atividades ao ar livre. Abriga importantes museus, como o Museu de Arte Moderna (MAM) e o Museu do Carmo. Marina da Glória: Um porto esportivo que já sediou importantes eventos, incluindo as competições de vela dos Jogos Olímpicos de 2016. Oferece vistas panorâmicas da cidade e opções de restaurantes. Palácio do Catete: Um imponente palácio que serviu como sede do governo federal. Hoje abriga o Museu da República, que conta a história do Brasil republicano. Largo do Machado: Um movimentado centro comercial e gastronômico, com lojas, bares e restaurantes. Praia do Flamengo: Embora não seja própria para banho, a Praia do Flamengo oferece um calçadão agradável para caminhadas e corridas, com vista para o mar. Gastronomia: O Flamengo possui uma variedade de restaurantes, bares e cafés, oferecendo opções para todos os gostos e orçamentos. Desde restaurantes sofisticados com vista para a baía até botequins tradicionais e lanchonetes. Hospedagem: O bairro oferece uma gama de hotéis e pousadas, desde opções econômicas até acomodações de luxo. Como chegar: O Flamengo é facilmente acessível por transporte público, incluindo ônibus, metrô (estações Largo do Machado e Flamengo) e táxis. Dicas para visitantes: Caminhe ou ande de bicicleta pelo Parque do Flamengo para apreciar a vista e o ambiente. Visite os museus da região, como o MAM e o Museu da República. Explore o Largo do Machado e experimente a gastronomia local. Reserve sua hospedagem com antecedência, principalmente durante a alta temporada. Se você busca um bairro tranquilo, com belas paisagens, fácil acesso a outras áreas da cidade e uma atmosfera carioca autêntica, o Flamengo é uma excelente escolha para sua viagem ao Rio de Janeiro. Consulte nossos pacotes de viagem para o Rio de Janeiro e inclua o Flamengo em seu roteiro!",
-    },
-    { text: `input: me fale sobre o destino ${prompt}` },
+    { text: `input: me fale sobre ${categorias} o destino ${prompt}` },
     { text: "output: " },
   ];
 
