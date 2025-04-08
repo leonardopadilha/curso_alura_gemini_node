@@ -1,13 +1,9 @@
-import "dotenv/config";
-
-import { GoogleGenerativeAI } from "@google/generative-ai";
+import { inicializaModelo } from "./modelo.js";
 import { fazerPergunta } from "./pergunta.js";
 
-const genAI = new GoogleGenerativeAI(process.env.API_KEY);
+const model = await inicializaModelo("gemini-2.0-flash");
 
 async function run() {
-  const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
-
   const categorias = await fazerPergunta(
     "Me fale as categorias que você deseja visualizar sobre o determinado destino: "
   );
