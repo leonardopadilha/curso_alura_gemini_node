@@ -18,11 +18,18 @@ export async function perguntar() {
     { text: "output: " },
   ];
 
-  const result = await model.generateContent({
+  const requisicao = {
     contents: [{ role: "user", parts }],
-  });
+  };
+
+  const result = await model.generateContent(requisicao);
+  const totalTokenEntrada = await model.countTokens(requisicao);
+  console.log(`\nTotal tokens de entrada: ${totalTokenEntrada.totalTokens}\n`);
 
   const response = await result.response;
   const text = response.text();
   console.log(text);
+
+  const totalTokenSaida = await model.countTokens(text);
+  console.log(`\nTotal tokens de saída: ${totalTokenSaida.totalTokens}\n`);
 }
